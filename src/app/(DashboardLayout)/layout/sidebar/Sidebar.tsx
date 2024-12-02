@@ -1,7 +1,7 @@
 import { useMediaQuery, Box, Drawer } from "@mui/material";
 import SidebarItems from "./SidebarItems";
 import { Upgrade } from "./Updrade";
-import { Sidebar, Logo } from 'react-mui-sidebar';
+import { Sidebar, Logo } from "react-mui-sidebar";
 
 interface ItemType {
   isMobileSidebarOpen: boolean;
@@ -20,16 +20,14 @@ const MSidebar = ({
 
   // Custom CSS for short scrollbar
   const scrollbarStyles = {
-    '&::-webkit-scrollbar': {
-      width: '7px',
-
+    "&::-webkit-scrollbar": {
+      width: "7px",
     },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#eff2f7',
-      borderRadius: '15px',
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "#eff2f7",
+      borderRadius: "15px",
     },
   };
-
 
   if (lgUp) {
     return (
@@ -62,7 +60,7 @@ const MSidebar = ({
             }}
           >
             <Sidebar
-              width={'270px'}
+              width={"270px"}
               collapsewidth="80px"
               open={isSidebarOpen}
               themeColor="#5d87ff"
@@ -80,7 +78,7 @@ const MSidebar = ({
                 <SidebarItems />
                 <Upgrade />
               </Box>
-            </Sidebar >
+            </Sidebar>
           </Box>
         </Drawer>
       </Box>
@@ -105,7 +103,7 @@ const MSidebar = ({
       {/* ------------------------------------------- */}
       <Box px={2}>
         <Sidebar
-          width={'270px'}
+          width={"270px"}
           collapsewidth="80px"
           isCollapse={false}
           mode="light"
@@ -128,14 +126,8 @@ const MSidebar = ({
       {/* ------------------------------------------- */}
       {/* Sidebar For Mobile */}
       {/* ------------------------------------------- */}
-
     </Drawer>
   );
 };
 
 export default MSidebar;
-
-
-
-
-

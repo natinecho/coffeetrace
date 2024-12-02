@@ -1,99 +1,93 @@
+"use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import {
-  Avatar,
-  Box,
-  Menu,
-  Button,
-  IconButton,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-
-import { IconListCheck, IconMail, IconUser } from "@tabler/icons-react";
-
+import { FaCaretDown } from "react-icons/fa";
+import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "next-auth/react"; // Import signOut from next-auth/react
+import { useSession } from "next-auth/react";
 const Profile = () => {
-  const [anchorEl2, setAnchorEl2] = useState(null);
-  const handleClick2 = (event: any) => {
-    setAnchorEl2(event.currentTarget);
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleToggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
   };
-  const handleClose2 = () => {
-    setAnchorEl2(null);
+
+  const handleCloseDropdown = () => {
+    setDropdownOpen(false);
   };
+
+  // Redirect to login page if session is not found and it's not loading
+  if (status !== "loading" && !session) {
+    router.push("/authentication/login"); // Redirect user to login page
+    return null; // Return null to prevent further rendering
+  }
 
   return (
-    <Box>
-      <IconButton
-        size="large"
-        aria-label="show 11 new notifications"
-        color="inherit"
-        aria-controls="msgs-menu"
-        aria-haspopup="true"
-        sx={{
-          ...(typeof anchorEl2 === "object" && {
-            color: "primary.main",
-          }),
-        }}
-        onClick={handleClick2}
+    <div className="relative sm:w-52  border  shadow-md rounded-full sm:rounded-lg">
+      <div
+        onClick={handleToggleDropdown}
+        className="flex items-center gap-3 cursor-pointer"
       >
-        <Avatar
-          src="/images/profile/user-1.jpg"
-          alt="image"
-          sx={{
-            width: 35,
-            height: 35,
-          }}
+        <img
+          src="/images/profile/user-3.svg"
+          alt="User"
+          className="w-12 h-12 rounded-md "
         />
-      </IconButton>
-      {/* ------------------------------------------- */}
-      {/* Message Dropdown */}
-      {/* ------------------------------------------- */}
-      <Menu
-        id="msgs-menu"
-        anchorEl={anchorEl2}
-        keepMounted
-        open={Boolean(anchorEl2)}
-        onClose={handleClose2}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        sx={{
-          "& .MuiMenu-paper": {
-            width: "200px",
-          },
-        }}
-      >
-        <MenuItem>
-          <ListItemIcon>
-            <IconUser width={20} />
-          </ListItemIcon>
-          <ListItemText>My Profile</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconMail width={20} />
-          </ListItemIcon>
-          <ListItemText>My Account</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconListCheck width={20} />
-          </ListItemIcon>
-          <ListItemText>My Tasks</ListItemText>
-        </MenuItem>
-        <Box mt={1} py={1} px={2}>
-          <Button
-            href="/authentication/login"
-            variant="outlined"
-            color="primary"
-            component={Link}
-            fullWidth
-          >
-            Logout
-          </Button>
-        </Box>
-      </Menu>
-    </Box>
+        <div className="hidden sm:flex gap-4 py-1 items-center">
+          <div className="flex-col items-start">
+            <div className="text-[#747C8A]  font-medium capitalize">
+              {session?.user?.name}
+            </div>
+            <div className="text-[#B4B4B4] text-sm capitalize">
+              {session?.user?.role}
+            </div>
+          </div>
+          <FaCaretDown />
+        </div>
+      </div>
+
+      {isDropdownOpen && (
+        <div className="absolute top-16 right-0 bg-white shadow-lg rounded-lg w-48 sm:w-52 z-10">
+          <ul className="list-none p-0 m-0">
+            <Link href="/message">
+              <li
+                className="py-2 px-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200"
+                onClick={handleCloseDropdown}
+              >
+                My Message
+              </li>
+            </Link>
+            <li
+              className="py-2 px-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200"
+              onClick={handleCloseDropdown}
+            >
+              My Account
+            </li>
+            <li
+              className="py-2 px-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200"
+              onClick={handleCloseDropdown}
+            >
+              My Tasks
+            </li>
+            <li className="py-2 px-4 text-center w-full">
+              <button
+                onClick={() =>
+                  signOut({
+                    redirect: true,
+                    callbackUrl: "/authentication/login",
+                  })
+                } // Use callbackUrl instead of redirectTo
+                className="inline-block w-full py-2 px-4 border border-palette-primary-dark text-palette-primary-main rounded-md hover:bg-palette-primary-main hover:text-white transition"
+              >
+                Logout
+              </button>
+            </li>
+          </ul>
+        </div>
+      )}
+    </div>
   );
 };
 
