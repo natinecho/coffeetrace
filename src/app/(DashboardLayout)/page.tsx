@@ -1,11 +1,18 @@
 "use client";
+import dynamic from "next/dynamic";
+
+const ProductPerformance = dynamic(
+  () => import("@/app/(DashboardLayout)/components/dashboard/ProductPerformance"),
+  { ssr: false }
+);
+
 import { Grid, Box } from "@mui/material";
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 // components
 import SalesOverview from "@/app/(DashboardLayout)/components/dashboard/SalesOverview";
 import YearlyBreakup from "@/app/(DashboardLayout)/components/dashboard/YearlyBreakup";
 // import RecentTransactions from "@/app/(DashboardLayout)/components/dashboard/RecentTransactions";
-import ProductPerformance from "@/app/(DashboardLayout)/components/dashboard/ProductPerformance";
+// import ProductPerformance from "@/app/(DashboardLayout)/components/dashboard/ProductPerformance";
 // import Blog from "@/app/(DashboardLayout)/components/dashboard/Blog";
 import MonthlyEarnings from "@/app/(DashboardLayout)/components/dashboard/MonthlyEarnings";
 // import UserAvatar from "@/app/(serverSide)/session";
@@ -26,7 +33,7 @@ const Dashboard = () => {
                 <YearlyBreakup />
               </Grid>
               <Grid item xs={12}>
-                <MonthlyEarnings  title ={"Monthly Earning"}/>
+                <MonthlyEarnings title ={"Monthly Earning"}/>
               </Grid>
             </Grid>
           </Grid>
